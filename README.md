@@ -1,7 +1,9 @@
 
-# PhotoPicker
+# VxgMediaPicker
 
-一款Android图片选择器，支持直接拍照、拍照并裁剪、单选裁剪、图片多选、图片放大预览、裁剪比例设置等，满足APP图片拍照、选择等模块需求。
+基于PhotoPicker（https://github.com/q805699513/PhotoPicker）
+的一款Android图片选择器，支持直接拍照、拍照并裁剪、单选裁剪、图片多选、图片放大预览、裁剪比例设置等，满足APP图片拍照、选择等模块需求。
+特别增加了视频和图片混选功能
 
 
 ### 最重要的是BUG比较少

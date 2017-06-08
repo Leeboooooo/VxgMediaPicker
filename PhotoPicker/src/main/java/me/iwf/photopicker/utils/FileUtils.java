@@ -12,17 +12,19 @@ import java.io.File;
 public class FileUtils {
     public static boolean fileIsExists(String path) {
         if (path == null || path.trim().length() <= 0) {
+            Log.e("TMG",path+"file not exists");
             return false;
         }
         try {
             File f = new File(path);
             if (!f.exists()) {
+                Log.e("TMG",path+"file not exists");
                 return false;
             }
         } catch (Exception e) {
+            Log.e("TMG",path+"file not exists");
             return false;
         }
-        Log.e("TMG",path+"file not exists");
         return true;
     }
 }

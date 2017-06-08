@@ -48,6 +48,7 @@ public class PhotoPicker {
     public final static String EXTRA_MEDIA_ALL = "MEDIA_ALL";
     public final static String EXTRA_MEDIA_PHOTO = "MEDIA_PHOTO";
     public final static String EXTRA_MEDIA_VIDEO = "MEDIA_VIDEO";
+    public final static String EXTRA_MEDIA_TYPE = "MEDIA_TYPE";
     public final static String EXTRA_GRID_COLUMN = "column";
     public final static String EXTRA_ORIGINAL_PHOTOS = "ORIGINAL_PHOTOS";
     public final static String EXTRA_PREVIEW_ENABLED = "PREVIEW_ENABLED";
@@ -155,6 +156,11 @@ public class PhotoPicker {
 
         public PhotoPickerBuilder setPreviewEnabled(boolean previewEnabled) {
             mPickerOptionsBundle.putBoolean(EXTRA_PREVIEW_ENABLED, previewEnabled);
+            return this;
+        }
+
+        public PhotoPickerBuilder setMediaType(int mediaType) {
+            mPickerOptionsBundle.putInt(EXTRA_MEDIA_TYPE, mediaType);
             return this;
         }
 

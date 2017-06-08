@@ -38,6 +38,8 @@ import static me.iwf.photopicker.PhotoPicker.EXTRA_CROP_X;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_CROP_Y;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_GRID_COLUMN;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_MAX_COUNT;
+import static me.iwf.photopicker.PhotoPicker.EXTRA_MEDIA_PHOTO;
+import static me.iwf.photopicker.PhotoPicker.EXTRA_MEDIA_TYPE;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_OPEN_CAMERA;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_OPEN_CROP;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_ORIGINAL_PHOTOS;
@@ -45,6 +47,7 @@ import static me.iwf.photopicker.PhotoPicker.EXTRA_PREVIEW_ENABLED;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_SHOW_CAMERA;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_SHOW_GIF;
 import static me.iwf.photopicker.PhotoPicker.KEY_SELECTED_PHOTOS;
+import static me.iwf.photopicker.PhotoPicker.MEDIA_TYPE_PHOTO;
 
 public class PhotoPickerActivity extends AppCompatActivity {
 
@@ -108,11 +111,22 @@ public class PhotoPickerActivity extends AppCompatActivity {
         columnNumber = getIntent().getIntExtra(EXTRA_GRID_COLUMN, DEFAULT_COLUMN_NUMBER);
         originalPhotos = getIntent().getStringArrayListExtra(EXTRA_ORIGINAL_PHOTOS);
 
+        Config config = new Config()
+                .setShowCamera(showCamera)
+                .setShowGif(showGif)
+                .setPreviewEnable(previewEnabled)
+                .setColumn(columnNumber)
+                .setMaxCount(maxCount)
+                .setOriginalPhotos(originalPhotos)
+                .setCrop(isCrop)
+                .setOpenCamera(openCamera)
+                .setMediaType(getIntent().getIntExtra(EXTRA_MEDIA_TYPE, MEDIA_TYPE_PHOTO));
 
         pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentByTag("tag");
         if (pickerFragment == null) {
-            pickerFragment = PhotoPickerFragment
-                    .newInstance(showCamera, showGif, previewEnabled, columnNumber, maxCount, originalPhotos, isCrop, openCamera);
+//            pickerFragment = PhotoPickerFragment
+//                    .newInstance(showCamera, showGif, previewEnabled, columnNumber, maxCount, originalPhotos, isCrop, openCamera);
+            pickerFragment = PhotoPickerFragment.newInstance(config);
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.container, pickerFragment, "tag")

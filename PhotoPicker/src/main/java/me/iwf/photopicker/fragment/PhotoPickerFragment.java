@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.iwf.photopicker.Config;
+import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPickerActivity;
 import me.iwf.photopicker.R;
 import me.iwf.photopicker.adapter.PhotoGridAdapter;
@@ -47,6 +49,7 @@ import me.iwf.photopicker.utils.PermissionsUtils;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static me.iwf.photopicker.PhotoPicker.DEFAULT_COLUMN_NUMBER;
+import static me.iwf.photopicker.PhotoPicker.EXTRA_MEDIA_TYPE;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_PREVIEW_ENABLED;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_SHOW_GIF;
 import static me.iwf.photopicker.utils.MediaStoreHelper.INDEX_ALL_PHOTOS;
@@ -85,6 +88,23 @@ public class PhotoPickerFragment extends Fragment {
     private RequestManager mGlideRequestManager;
     private boolean isCrop;
     private boolean isOpenCamera;
+
+    public static PhotoPickerFragment newInstance(Config config){
+        Bundle args = new Bundle();
+        args.putBoolean(EXTRA_CAMERA, config.isShowCamera());
+        args.putBoolean(EXTRA_GIF, config.isShowGif());
+        args.putBoolean(EXTRA_PREVIEW_ENABLED, config.isPreviewEnable());
+        args.putInt(EXTRA_COLUMN, config.getColumn());
+        args.putInt(EXTRA_COUNT, config.getMaxCount());
+        args.putStringArrayList(EXTRA_ORIGIN, config.getOriginalPhotos());
+        args.putBoolean(EXTRA_CROP, config.isCrop());
+        args.putBoolean(EXTRA_OPEN_CAMERA, config.isOpenCamera());
+        args.putInt(EXTRA_MEDIA_TYPE, config.getMediaType());
+
+        PhotoPickerFragment fragment = new PhotoPickerFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public static PhotoPickerFragment newInstance(boolean showCamera, boolean showGif,
                                                   boolean previewEnable, int column, int maxCount, ArrayList<String> originalPhotos, boolean isCrop, boolean openCamera) {
@@ -130,6 +150,7 @@ public class PhotoPickerFragment extends Fragment {
 
         boolean showGif = getArguments().getBoolean(EXTRA_GIF);
         mediaStoreArgs.putBoolean(EXTRA_SHOW_GIF, showGif);
+        mediaStoreArgs.putInt(EXTRA_MEDIA_TYPE,getArguments().getInt(EXTRA_MEDIA_TYPE, PhotoPicker.MEDIA_TYPE_PHOTO));
         MediaStoreHelper.getPhotoDirs(getActivity(), mediaStoreArgs,
                 new MediaStoreHelper.PhotosResultCallback() {
                     @Override

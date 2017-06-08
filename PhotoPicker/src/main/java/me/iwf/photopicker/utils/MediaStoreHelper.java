@@ -1,5 +1,6 @@
 package me.iwf.photopicker.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -26,6 +27,8 @@ import static android.provider.MediaStore.MediaColumns.SIZE;
 public class MediaStoreHelper {
 
   public final static int INDEX_ALL_PHOTOS = 0;
+  private static boolean isMediaAll = false;
+  private static List<PhotoDirectory> mDires;
 
 
   public static void getPhotoDirs(FragmentActivity activity, Bundle args, PhotosResultCallback resultCallback) {
@@ -44,9 +47,21 @@ public class MediaStoreHelper {
     }
 
     @Override public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-      int mediaType = args.getInt(PhotoPicker.EXTRA_MEDIA_ALL, 0);
+      int mediaType = args.getInt(PhotoPicker.EXTRA_MEDIA_TYPE,PhotoPicker.MEDIA_TYPE_PHOTO);
       if (mediaType == PhotoPicker.MEDIA_TYPE_ALL){
-        return new PhotoDirectoryLoader(context, args.getBoolean(PhotoPicker.EXTRA_SHOW_GIF, false));
+        isMediaAll = true;
+        return new MediaAllDirectoryLoader(context,
+                args.getBoolean(PhotoPicker.EXTRA_SHOW_GIF, false),
+                new MediaAllDirectoryLoader.onMediaLoad() {
+                  @Override
+                  public void onFinished(List<PhotoDirectory> directories) {
+                    mDires = new ArrayList<>();
+                    mDires.addAll(directories);
+//                    if (resultCallback != null) {
+//                      resultCallback.onResultCallback(directories);
+//                    }
+                  }
+                });
       }else if (mediaType == PhotoPicker.MEDIA_TYPE_VIDEO){
         return null;
       }else {
@@ -57,6 +72,12 @@ public class MediaStoreHelper {
     @Override public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
       if (data == null)  return;
+      if (isMediaAll){
+        if (resultCallback != null) {
+          resultCallback.onResultCallback(mDires);
+        }
+        return;
+      }
       List<PhotoDirectory> directories = new ArrayList<>();
       PhotoDirectory photoDirectoryAll = new PhotoDirectory();
       photoDirectoryAll.setName(context.getString(R.string.__picker_all_image));

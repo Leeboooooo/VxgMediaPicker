@@ -120,4 +120,11 @@ public class PhotoDirectory {
     }
   }
 
+  public void addPhoto(Photo photo) {
+    if (photo == null) return;
+    if (photo.getPath() == null) return;
+    if (FileUtils.fileIsExists(photo.getPath())) {
+      photos.add(photo);
+    }
+  }
 }

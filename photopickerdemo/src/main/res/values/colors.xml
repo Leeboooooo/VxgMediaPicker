@@ -4,6 +4,9 @@
     <color name="view_color">#d3d3d3</color>
 
     <color name="colorPrimary">#38393E</color>
+
     <color name="colorPrimaryDark">#2F3034</color>
+
+    <color name="colorPrimaryAlpha">#44000000</color>
 
 </resources>

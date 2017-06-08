@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -112,6 +114,11 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
                 photo = photos.get(position);
             }
 
+            Photo.MEDIA_TYPE mediaType = photo.getMediaType();
+            if (mediaType == Photo.MEDIA_TYPE.VIDEO){
+                holder.vSelected.setVisibility(View.GONE);
+            }else holder.vSelected.setVisibility(View.VISIBLE);
+
             boolean canLoadImage = AndroidLifecycleUtils.canLoadImage(holder.ivPhoto.getContext());
 
             if (canLoadImage) {
@@ -161,6 +168,21 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
                 }
             });
 
+            if (mediaType == Photo.MEDIA_TYPE.VIDEO
+                    ||mediaType == Photo.MEDIA_TYPE.GIF){
+                holder.flVideoInfo.setVisibility(View.VISIBLE);
+                String path = photo.getPath();
+                String duration = photo.getDuration();
+                if (photo.getMediaType() == Photo.MEDIA_TYPE.GIF){
+                    path = photo.getPath();
+                    duration = "GIF";
+                }
+                holder.tvDuration.setText(duration);
+                holder.tvSize.setText(photo.getSizeByUnit());
+            }else {
+                holder.flVideoInfo.setVisibility(View.GONE);
+            }
+
         } else {
             holder.ivPhoto.setImageResource(R.drawable.__picker_camera);
         }
@@ -181,11 +203,17 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
     public static class PhotoViewHolder extends RecyclerView.ViewHolder {
         private ImageView ivPhoto;
         private View vSelected;
+        private FrameLayout flVideoInfo;
+        private TextView tvDuration;
+        private TextView tvSize;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);
             ivPhoto = (ImageView) itemView.findViewById(R.id.iv_photo);
             vSelected = itemView.findViewById(R.id.v_selected);
+            flVideoInfo = (FrameLayout)itemView.findViewById(R.id.video_info_layout);
+            tvDuration = (TextView)itemView.findViewById(R.id.video_duration_txt);
+            tvSize = (TextView)itemView.findViewById(R.id.video_size_txt);
         }
     }
 

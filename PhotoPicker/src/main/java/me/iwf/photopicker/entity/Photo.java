@@ -111,6 +111,15 @@ public class Photo {
     return MEDIA_TYPE.PNG;
   }
 
+  public String getDuration() {
+    try {
+      long duration = Long.parseLong(mDuration);
+      return formatTimeWithMin(duration);
+    } catch (NumberFormatException e) {
+      return "0:00";
+    }
+  }
+
   public long getSize() {
     try {
       long result = Long.valueOf(mSize);

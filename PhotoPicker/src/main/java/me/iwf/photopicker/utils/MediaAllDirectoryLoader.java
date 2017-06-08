@@ -225,18 +225,17 @@ public class MediaAllDirectoryLoader extends CursorLoader {
 
   private void sort(){
     if (mDirectories == null || mDirectories.size() < 1) return;
-    Comparator<PhotoDirectory> comparator = new Comparator<PhotoDirectory>() {
+    Comparator<Photo> comparator = new Comparator<Photo>() {
       @Override
-      public int compare(PhotoDirectory o1, PhotoDirectory o2) {
-        long preModifyDate = o1.getDateAdded();
-        long nextModifyDate = o2.getDateAdded();
-        if (preModifyDate == nextModifyDate) return 0;
-        if (preModifyDate < nextModifyDate) return 1;
-        if (preModifyDate > nextModifyDate) return -1;
-        return 0;
+      public int compare(Photo o1, Photo o2) {
+        if (o1.mModifyData == null)return 0;
+        if (o2.mModifyData == null)return 0;
+        return o2.mModifyData.compareToIgnoreCase(o1.mModifyData);
       }
     };
-    Collections.sort(mDirectories,comparator);
+    for(PhotoDirectory photoDirectory : mDirectories){
+      Collections.sort(photoDirectory.getPhotos(),comparator);
+    }
     if (mOnMediaLoad != null){
       mOnMediaLoad.onFinished(mDirectories);
     }

@@ -26,6 +26,7 @@ import java.util.Locale;
 
 import me.iwf.photopicker.entity.Photo;
 import me.iwf.photopicker.event.OnItemCheckListener;
+import me.iwf.photopicker.event.OnItemVideoClickListener;
 import me.iwf.photopicker.fragment.ImagePagerFragment;
 import me.iwf.photopicker.fragment.PhotoPickerFragment;
 
@@ -164,6 +165,15 @@ public class PhotoPickerActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        pickerFragment.getPhotoGridAdapter().setOnItemVideoCheckListener(new OnItemVideoClickListener() {
+            @Override
+            public boolean onClick(int position, Photo path) {
+                returnActivity();
+                return false;
+            }
+        });
+
         if (savedInstanceState==null){
             if (openCamera) {
                 linear_view.setVisibility(View.GONE);
@@ -246,11 +256,12 @@ public class PhotoPickerActivity extends AppCompatActivity {
         }
 
         if (item.getItemId() == R.id.done && !isCrop) {
-            Intent intent = new Intent();
+            returnActivity();
+            /*Intent intent = new Intent();
             ArrayList<String> selectedPhotos = pickerFragment.getPhotoGridAdapter().getSelectedPhotoPaths();
             intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, selectedPhotos);
             setResult(RESULT_OK, intent);
-            finish();
+            finish();*/
             return true;
         }
 
@@ -282,5 +293,13 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
     public void setShowGif(boolean showGif) {
         this.showGif = showGif;
+    }
+
+    private void returnActivity(){
+        Intent intent = new Intent();
+        ArrayList<String> selectedPhotos = pickerFragment.getPhotoGridAdapter().getSelectedPhotoPaths();
+        intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, selectedPhotos);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

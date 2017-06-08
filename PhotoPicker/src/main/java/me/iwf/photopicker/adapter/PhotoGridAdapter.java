@@ -22,6 +22,7 @@ import me.iwf.photopicker.R;
 import me.iwf.photopicker.entity.Photo;
 import me.iwf.photopicker.entity.PhotoDirectory;
 import me.iwf.photopicker.event.OnItemCheckListener;
+import me.iwf.photopicker.event.OnItemVideoClickListener;
 import me.iwf.photopicker.event.OnPhotoClickListener;
 import me.iwf.photopicker.utils.AndroidLifecycleUtils;
 import me.iwf.photopicker.utils.MediaStoreHelper;
@@ -35,6 +36,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
     private RequestManager glide;
 
     private OnItemCheckListener onItemCheckListener = null;
+    private OnItemVideoClickListener onItemVideoCheckListener = null;
     private OnPhotoClickListener onPhotoClickListener = null;
     private View.OnClickListener onCameraClickListener = null;
 
@@ -157,9 +159,20 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
                     int pos = holder.getAdapterPosition();
                     boolean isEnable = true;
 
+                    final Photo selectPhoto = getCurrentPhotos().get(pos);
+                    List<String> selectedPhotos = getSelectedPhotos();
+                    int size = selectedPhotos.size();
                     if (onItemCheckListener != null) {
-                        isEnable = onItemCheckListener.onItemCheck(pos, photo,
-                                getSelectedPhotos().size() + (isSelected(photo) ? -1 : 1));
+                        if (selectPhoto.getMediaType() == Photo.MEDIA_TYPE.VIDEO){
+                            isEnable = false;
+                            if (size < 1 && onItemVideoCheckListener != null){
+                                toggleSelection(photo);
+                                onItemVideoCheckListener.onClick(pos,photo);
+                            }
+                        }else {
+                            isEnable = onItemCheckListener.onItemCheck(pos, photo,
+                                    selectedPhotos.size() + (isSelected(photo) ? -1 : 1));
+                        }
                     }
                     if (isEnable) {
                         toggleSelection(photo);
@@ -222,6 +235,9 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
         this.onItemCheckListener = onItemCheckListener;
     }
 
+    public void setOnItemVideoCheckListener(OnItemVideoClickListener listener){
+        this.onItemVideoCheckListener = listener;
+    }
 
     public void setOnPhotoClickListener(OnPhotoClickListener onPhotoClickListener) {
         this.onPhotoClickListener = onPhotoClickListener;

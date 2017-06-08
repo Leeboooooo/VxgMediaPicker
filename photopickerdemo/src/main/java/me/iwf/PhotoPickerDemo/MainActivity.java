@@ -115,7 +115,7 @@ public class MainActivity extends Activity {
                                     .setPhotoCount(PhotoAdapter.MAX)
                                     .setShowCamera(false)
                                     .setShowGif(true)
-                                    .setPreviewEnabled(true)
+                                    .setPreviewEnabled(false)
                                     .setMediaType(PhotoPicker.MEDIA_TYPE_ALL)
                                     .setSelected(selectedPhotos)
                                     .start(MainActivity.this);

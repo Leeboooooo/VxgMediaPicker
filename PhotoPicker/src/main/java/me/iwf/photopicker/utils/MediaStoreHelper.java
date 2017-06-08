@@ -47,6 +47,7 @@ public class MediaStoreHelper {
     }
 
     @Override public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+      isMediaAll = false;
       int mediaType = args.getInt(PhotoPicker.EXTRA_MEDIA_TYPE,PhotoPicker.MEDIA_TYPE_PHOTO);
       if (mediaType == PhotoPicker.MEDIA_TYPE_ALL){
         isMediaAll = true;
@@ -57,9 +58,6 @@ public class MediaStoreHelper {
                   public void onFinished(List<PhotoDirectory> directories) {
                     mDires = new ArrayList<>();
                     mDires.addAll(directories);
-//                    if (resultCallback != null) {
-//                      resultCallback.onResultCallback(directories);
-//                    }
                   }
                 });
       }else if (mediaType == PhotoPicker.MEDIA_TYPE_VIDEO){

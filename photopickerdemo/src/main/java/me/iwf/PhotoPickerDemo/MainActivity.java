@@ -113,7 +113,8 @@ public class MainActivity extends Activity {
                         if (photoAdapter.getItemViewType(position) == PhotoAdapter.TYPE_ADD) {
                             PhotoPicker.builder()
                                     .setPhotoCount(PhotoAdapter.MAX)
-                                    .setShowCamera(true)
+                                    .setShowCamera(false)
+                                    .setShowGif(true)
                                     .setPreviewEnabled(true)
                                     .setMediaType(PhotoPicker.MEDIA_TYPE_ALL)
                                     .setSelected(selectedPhotos)
